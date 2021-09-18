@@ -11,5 +11,6 @@ then laod it from chrome
 
 
 ## preview
-when the url is `https://github.com/?q=123`
-the popup will be [](./preview.png)
+when the url is `https://github.com/?q=123`，the popup will be
+
+ <img src="./preview.png">
