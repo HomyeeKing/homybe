@@ -1,14 +1,19 @@
 {
-  "name": "链接表",
-  "description": "用于列表展示超长链接，用于查看属性",
+  "name": "EasyHref",
+  "description": "display & operate the current page url",
   "author": "HomyeeKing",
   "manifest_version": 3,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "permissions": ["tabs"],
   "background": {
     "service_worker": "background.js"
   },
   "action": {
     "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "assets/icon.png",
+    "48": "assets/icon.png",
+    "128": "assets/icon.png"
   }
 }
