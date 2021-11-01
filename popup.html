@@ -14,27 +14,40 @@
           <th></th>
           <th>key</th>
           <th>value</th>
+          <th></th>
         </tr>
       </thead>
       <tbody id="tbody"></tbody>
     </table>
+    <!-- current url container -->
+    <div>
+      <h3>
+        CURRENT:
+        <span class="warn-text text-red cursor-pointer">RELOAD W/ NEW</span>
+      </h3>
+      <textarea id="current-url" rows="4" cols="48"></textarea>
+    </div>
+
     <template id="productrow">
       <tr>
         <td>
-          <input type="checkbox" checked class="checkbox" />
+          <span id="add-btn" class="cursor-pointer">➕</span>
+          <!-- <input type="checkbox" checked class="checkbox" /> -->
         </td>
-        <td></td>
-        <td></td>
+        <td>
+          <input type="text" id="key-input" class="text-center" />
+        </td>
+        <td>
+          <input type="text" id="value-input" class="text-center" />
+        </td>
+        <td>
+          <span id="remove-btn" class="cursor-pointer">➖</span>
+        </td>
       </tr>
     </template>
 
     <template id="nodata"> url参数为空 </template>
-    
-    <!-- current url container -->
-    <div>
-        <h3>current url: </h3>
-        <textarea id="current-url" rows="4" cols="48" ></textarea>
-    </div>
+
     <script src="./popup.js" type="module"></script>
   </body>
 </html>

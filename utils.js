@@ -20,6 +20,7 @@ const objToQuery = (obj) => {
 };
 
 export const rmQuery = (key, url = store.url) => {
+  if (key === "") return;
   const [host, query] = url.split("?");
   const queryObj = queryToObj(query);
   Reflect.deleteProperty(queryObj, key);
@@ -31,6 +32,11 @@ export const addQuery = (obj, url = store.url) => {
   const queryObj = queryToObj(query);
   Object.assign(queryObj, obj);
   return `${host}?${objToQuery(queryObj)}`;
+};
+
+export const updateQuery = (oldKey, newObj, url = store.url) => {
+  if (oldKey === "") return;
+  store.url = addQuery(newObj, rmQuery(oldKey, url));
 };
 
 export const throttle = (fn, timeout = 300) => {

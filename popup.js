@@ -1,32 +1,65 @@
 import store from "./store.js";
-import { addQuery, rmQuery, throttle } from "./utils.js";
+import { rmQuery, updateQuery } from "./utils.js";
 
 const tbody = document.querySelector("#tbody");
 const template = document.querySelector("#productrow");
 const noData = document.querySelector("#nodata");
 const currentUrlNode = document.querySelector("#current-url");
 
-function createTr(v1, v2) {
+const warnText = document.querySelector(".warn-text");
+/**
+ * 创建行
+ * @param {String} v1 key的值
+ * @param {String} v2 value的值
+ */
+function createTr(v1 = "", v2 = "") {
+  let oldKey = v1;
+
   const clone = template.content.cloneNode(true);
   const tr = clone.querySelector("tr");
-  const checkbox = clone.querySelector(".checkbox");
+  //   const checkbox = clone.querySelector(".checkbox");
 
-  const td = clone.querySelectorAll("td");
-  td[1].textContent = v1;
-  td[2].textContent = v2;
+  const addBtn = clone.querySelector("#add-btn");
+  const removeBtn = clone.querySelector("#remove-btn");
+  const keyInput = clone.querySelector("#key-input");
+  const valueInput = clone.querySelector("#value-input");
+  keyInput.value = v1;
+  valueInput.value = v2;
 
-  function toggleCheckbox() {
-    if (checkbox.checked) {
-      store.url = addQuery({ [v1]: v2 });
-    } else {
-      store.url = rmQuery(v1);
-    }
-  }
-
-  tr.addEventListener("click", throttle(toggleCheckbox), {
-    capture: true,
+  //   function toggleCheckbox() {
+  //     console.log("click");
+  //     if (checkbox.checked && v1 !== "") {
+  //       store.url = addQuery({ [v1]: v2 });
+  //     } else {
+  //       store.url = rmQuery(v1);
+  //     }
+  //   }
+  //   创建行
+  addBtn.addEventListener("click", () => {
+    createTr();
   });
+
+  //   移除行
+  removeBtn.addEventListener("click", () => {
+    removeTr(tr);
+    store.url = rmQuery(oldKey);
+  });
+
+  keyInput.onchange = () => {
+    updateQuery(oldKey, { [keyInput.value]: valueInput.value });
+    oldKey = keyInput.value;
+  };
+
+  valueInput.onchange = () => {
+    updateQuery(oldKey, { [keyInput.value]: valueInput.value });
+  };
+
+  //   checkbox.addEventListener("change", throttle(toggleCheckbox));
   tbody.appendChild(clone);
+}
+
+function removeTr(node) {
+  tbody.removeChild(node);
 }
 
 chrome.runtime.sendMessage(
@@ -35,6 +68,7 @@ chrome.runtime.sendMessage(
   },
   (url) => {
     // init url
+    store.pageUrl = url;
     store.url = url;
     currentUrlNode.textContent = store.url;
 
@@ -51,3 +85,6 @@ chrome.runtime.sendMessage(
     }
   }
 );
+warnText.onclick = () => {
+  location.href = store.url;
+};
