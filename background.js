@@ -23,6 +23,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendRes) => {
       break;
     case "pageReload":
       chrome.tabs.update(tab.tabId, { url: msg.url });
+      break;
     default:
       break;
   }
