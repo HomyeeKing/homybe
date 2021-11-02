@@ -86,5 +86,8 @@ chrome.runtime.sendMessage(
   }
 );
 warnText.onclick = () => {
-  location.href = store.url;
+  chrome.runtime.sendMessage({
+    type: "pageReload",
+    url: store.url,
+  });
 };
