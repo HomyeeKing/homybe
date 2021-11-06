@@ -90,4 +90,5 @@ warnText.onclick = () => {
     type: "pageReload",
     url: store.url,
   });
+  document.querySelector(".warn-text").style.display = 'none'
 };

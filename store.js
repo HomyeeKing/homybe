@@ -10,10 +10,11 @@ const store = new Proxy(
         document.querySelector("#current-url").textContent = newVal;
         if (newVal !== target.pageUrl) {
           document.querySelector(".warn-text").style.display = 'inline'
+          target.pageUrl = newVal
         }
       }
 
-      return Reflect.set(...arguments)
+      return Reflect.set(arguments)
     },
   }
 );
