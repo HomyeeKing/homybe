@@ -1,5 +1,6 @@
 import store from "./store.js";
-import { rmQuery, updateQuery } from "./utils.js";
+import { rmQuery, updateQuery, showTips } from "./utils.js";
+import { reloadPage } from './chrUtils.js'
 
 const tbody = document.querySelector("#tbody");
 const template = document.querySelector("#productrow");
@@ -13,82 +14,84 @@ const warnText = document.querySelector(".warn-text");
  * @param {String} v2 value的值
  */
 function createTr(v1 = "", v2 = "") {
-  let oldKey = v1;
+	let oldKey = v1;
 
-  const clone = template.content.cloneNode(true);
-  const tr = clone.querySelector("tr");
-  //   const checkbox = clone.querySelector(".checkbox");
+	const clone = template.content.cloneNode(true);
+	const tr = clone.querySelector("tr");
+	//   const checkbox = clone.querySelector(".checkbox");
 
-  const addBtn = clone.querySelector("#add-btn");
-  const removeBtn = clone.querySelector("#remove-btn");
-  const keyInput = clone.querySelector("#key-input");
-  const valueInput = clone.querySelector("#value-input");
-  keyInput.value = v1;
-  valueInput.value = v2;
+	const addBtn = clone.querySelector("#add-btn");
+	const removeBtn = clone.querySelector("#remove-btn");
+	const keyInput = clone.querySelector("#key-input");
+	const valueInput = clone.querySelector("#value-input");
+	keyInput.value = v1;
+	valueInput.value = v2;
 
-  //   function toggleCheckbox() {
-  //     console.log("click");
-  //     if (checkbox.checked && v1 !== "") {
-  //       store.url = addQuery({ [v1]: v2 });
-  //     } else {
-  //       store.url = rmQuery(v1);
-  //     }
-  //   }
-  //   创建行
-  addBtn.addEventListener("click", () => {
-    createTr();
-  });
+	//   function toggleCheckbox() {
+	//     console.log("click");
+	//     if (checkbox.checked && v1 !== "") {
+	//       store.url = addQuery({ [v1]: v2 });
+	//     } else {
+	//       store.url = rmQuery(v1);
+	//     }
+	//   }
+	//   创建行
+	addBtn.addEventListener("click", () => {
+		createTr();
+	});
 
-  //   移除行
-  removeBtn.addEventListener("click", () => {
-    removeTr(tr);
-    store.url = rmQuery(oldKey);
-  });
+	//   移除行
+	removeBtn.addEventListener("click", () => {
+		removeTr(tr);
+		store.url = rmQuery(oldKey);
+	});
 
-  keyInput.onchange = () => {
-    updateQuery(oldKey, { [keyInput.value]: valueInput.value });
-    oldKey = keyInput.value;
-  };
+	keyInput.onchange = () => {
+		updateQuery(oldKey, { [keyInput.value]: valueInput.value });
+		oldKey = keyInput.value;
+	};
 
-  valueInput.onchange = () => {
-    updateQuery(oldKey, { [keyInput.value]: valueInput.value });
-  };
+	valueInput.onchange = () => {
+		updateQuery(oldKey, { [keyInput.value]: valueInput.value });
+	};
 
-  //   checkbox.addEventListener("change", throttle(toggleCheckbox));
-  tbody.appendChild(clone);
+	//   checkbox.addEventListener("change", throttle(toggleCheckbox));
+	tbody.appendChild(clone);
 }
 
 function removeTr(node) {
-  tbody.removeChild(node);
+	if (tbody.childNodes.length === 1) {
+		tbody.removeChild(node);
+
+	}
 }
 
 chrome.runtime.sendMessage(
-  {
-    type: "getUrl",
-  },
-  (url) => {
-    // init url
-    store.pageUrl = url;
-    store.url = url;
-    currentUrlNode.textContent = store.url;
+	{
+		type: "getUrl",
+	},
+	(url) => {
+		// init url
+		store.pageUrl = url;
+		store.url = url;
+		currentUrlNode.textContent = store.url;
 
-    const index = url.indexOf("?");
-    const query = index > -1 ? url.slice(index) : "";
-    if (query === "") {
-      const clone = noData.content.cloneNode(true);
-      tbody.append(clone);
-    } else {
-      const qs = new URLSearchParams(query);
-      for (const q of qs) {
-        createTr(q[0], q[1]);
-      }
-    }
-  }
+		const index = url.indexOf("?");
+		const query = index > -1 ? url.slice(index) : "";
+		console.log(`query`, query)
+		if (query === "") {
+			//   const clone = noData.content.cloneNode(true);
+			//   tbody.append(clone);
+			createTr('url参数为空')
+		} else {
+			const qs = new URLSearchParams(query);
+			for (const q of qs) {
+				createTr(q[0], q[1]);
+			}
+		}
+	}
 );
 warnText.onclick = () => {
-  chrome.runtime.sendMessage({
-    type: "pageReload",
-    url: store.url,
-  });
-  document.querySelector(".warn-text").style.display = 'none'
+	reloadPage(store.url)
+	showTips(false)
 };
