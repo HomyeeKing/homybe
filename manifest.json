@@ -1,13 +1,38 @@
 {
   "name": "EasyHref",
-  "description": "display & operate the current page url",
+  "description": "display & operate the current page url & other small features",
   "author": "HomyeeKing",
   "manifest_version": 3,
   "version": "0.0.3",
-  "permissions": ["tabs"],
+  "permissions": [
+    "tabs",
+    "contextMenus"
+  ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.mjs",
+    "type": "module"
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*/*"
+      ],
+      "js": [
+        "./content_scripts/init.js"
+      ]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "https://*/*"
+      ],
+      "resources": [
+        "/content_scripts/*.js",
+        "/src/*.js"
+      ]
+    }
+  ],
   "action": {
     "default_popup": "popup.html"
   },

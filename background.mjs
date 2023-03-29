@@ -1,3 +1,5 @@
+import { showQrCodeContext } from './src/qrdecode.js';
+
 async function getCurrentTab() {
   let queryOptions = { active: true, currentWindow: true };
   let [tab] = await chrome.tabs.query(queryOptions);
@@ -15,15 +17,17 @@ chrome.tabs.onUpdated.addListener(async () => {
 
 chrome.runtime.onMessage.addListener((msg, sender, sendRes) => {
   switch (msg.type) {
-    case "getUrl":
+    case 'getUrl':
       sendRes(tab.url);
       break;
-    case "log":
+    case 'log':
       console.log(msg.content);
       break;
-    case "pageReload":
+    case 'pageReload':
       chrome.tabs.update(tab.tabId, { url: msg.url });
       break;
+    case 'showQrCodeContext':
+      showQrCodeContext();
     default:
       break;
   }
