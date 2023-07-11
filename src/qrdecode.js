@@ -49,7 +49,7 @@ function handleEle(ele) {
   let parentNode, target;
   const mask = document.createElement('div');
 
-  ele.addEventListener('mouseover', (event) => {
+  ele.addEventListener('mouseover', async (event) => {
     event.stopPropagation();
     target = event.target;
     const isCanvas = target.tagName.toLowerCase() === 'canvas';
@@ -57,27 +57,29 @@ function handleEle(ele) {
     if (isCanvas || isImg) {
       parentNode = target.parentNode;
       parentNode.style.position = 'relative';
-      mask.id = 'easy-href-qrcode-mask';
-      mask.style.position = 'absolute';
-      mask.style.inset = 0;
-      mask.style.background = 'rgba(0,0,0,.7)';
-      mask.style.color = '#fff';
-      mask.style.cursor = 'pointer';
-      mask.style.fontSize = '20px';
-      mask.textContent = '点击复制 URL';
-      mask.style.display = 'flex';
-      mask.style.justifyContent = 'center';
-      mask.style.alignItems = 'center';
-      parentNode.appendChild(mask);
+      let saveUrl;
+      if (isCanvas) {
+        saveUrl = await getQRCodeUrl(target);
+      } else {
+        saveUrl = target.src;
+      }
+      if (saveUrl) {
+        mask.id = 'easy-href-qrcode-mask';
+        mask.style.position = 'absolute';
+        mask.style.inset = 0;
+        mask.style.background = 'rgba(0,0,0,.7)';
+        mask.style.color = '#fff';
+        mask.style.cursor = 'pointer';
+        mask.style.fontSize = '20px';
+        mask.textContent = '点击复制 URL';
+        mask.style.display = 'flex';
+        mask.style.justifyContent = 'center';
+        mask.style.alignItems = 'center';
+        parentNode.appendChild(mask);
+      }
 
       mask.onclick = async (e) => {
         e.stopPropagation();
-        let saveUrl;
-        if (isCanvas) {
-          saveUrl = await getQRCodeUrl(target);
-        } else {
-          saveUrl = target.src;
-        }
         navigator.clipboard.writeText(saveUrl).then(
           () => {
             mask.textContent = '复制成功';
