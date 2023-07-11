@@ -6,7 +6,7 @@ so I use `URLSearchParams` to display the query in table list
 
 ## Use
 
-`git clone git@github.com:HomyeeKing/href-list.git`
+`git clone git@github.com:HomyeeKing/homybe.git`
 
 then laod it from chrome
 
@@ -21,7 +21,7 @@ when the url is `https://github.com/?q=123`，the popup will be
 
 
 
-[qrcode](https://github.com/HomyeeKing/href-list/assets/49113249/f6c38cfd-51e4-4093-ae61-25085ff919c6)
+[qrcode](https://github.com/HomyeeKing/homybe/assets/49113249/f6c38cfd-51e4-4093-ae61-25085ff919c6)
 
 
 
