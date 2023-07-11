@@ -1,8 +1,21 @@
-async function getQRCodeUrl(canvas) {
+/**
+ * @param {HTMLImageElement | HTMLCanvasElement} ele
+ */
+async function getQRCodeUrl(ele, isCanvas) {
   const jsQrUrl = chrome.runtime.getURL('content_scripts/jsqr.js');
   await import(jsQrUrl);
-  const ctx = canvas.getContext('2d');
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  let imageData;
+  if (isCanvas) {
+    const ctx = ele.getContext('2d');
+    imageData = ctx.getImageData(0, 0, ele.width, ele.height);
+  } else {
+    // TODO: better parse qrcode image
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    ele.crossOrigin = '';
+    ctx.drawImage(ele, 0, 0, ele.width, ele.height);
+    imageData = ctx.getImageData(0, 0, ele.width, ele.height);
+  }
   const code = jsQR(imageData.data, imageData.width, imageData.height);
   if (code) {
     return code.data;
@@ -11,45 +24,16 @@ async function getQRCodeUrl(canvas) {
   }
 }
 
-function observeNewCanvas() {
-  // 检查节点中是否包含 canvas 元素
-  function checkCanvas(node) {
-    if (node.nodeName === 'CANVAS') {
-      // 在这里对新增的 canvas 元素进行操作
-      handleEle(node);
-    } else if (node.childNodes) {
-      // 遍历子节点，递归检查每个子节点
-      node.childNodes.forEach(function (child) {
-        checkCanvas(child);
-      });
-    }
-  }
-  // 创建一个 MutationObserver 实例
-  const observer = new MutationObserver(function (mutations) {
-    // 遍历所有变化的节点
-    mutations.forEach(function (mutation) {
-      // 遍历被添加的节点
-      mutation.addedNodes.forEach(function (node) {
-        // 递归检查节点中是否包含 canvas 元素
-        checkCanvas(node);
-      });
-    });
-  });
-
-  // 开始观察 DOM 的变化
-  observer.observe(document.body, { childList: true, subtree: true });
-}
-
 /**
  *
  * @param {HTMLImageElement | HTMLCanvasElement} ele
  */
-function handleEle(ele) {
+function handleEle() {
   /** @type HTMLDivElement */
   let parentNode, target;
   const mask = document.createElement('div');
 
-  ele.addEventListener('mouseover', async (event) => {
+  document.addEventListener('mouseover', async (event) => {
     event.stopPropagation();
     target = event.target;
     const isCanvas = target.tagName.toLowerCase() === 'canvas';
@@ -57,12 +41,8 @@ function handleEle(ele) {
     if (isCanvas || isImg) {
       parentNode = target.parentNode;
       parentNode.style.position = 'relative';
-      let saveUrl;
-      if (isCanvas) {
-        saveUrl = await getQRCodeUrl(target);
-      } else {
-        saveUrl = target.src;
-      }
+      let saveUrl = await getQRCodeUrl(target, isCanvas);
+
       if (saveUrl) {
         mask.id = 'easy-href-qrcode-mask';
         mask.style.position = 'absolute';
@@ -101,8 +81,5 @@ function handleEle(ele) {
 }
 
 export function registerCanvasListener() {
-  observeNewCanvas();
-  document.querySelectorAll('canvas').forEach(handleEle);
-  // TODO: img qrcode
-  // document.querySelectorAll('img').forEach(handleEle);
+  handleEle();
 }
