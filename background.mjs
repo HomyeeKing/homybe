@@ -14,7 +14,6 @@ chrome.tabs.onUpdated.addListener(async () => {
 });
 
 chrome.runtime.onMessage.addListener(async (msg, sender, sendRes) => {
-  console.log('msg', msg.canvas.tagName);
   switch (msg.type) {
     case 'getUrl':
       sendRes(tab.url);
@@ -25,10 +24,6 @@ chrome.runtime.onMessage.addListener(async (msg, sender, sendRes) => {
     case 'pageReload':
       chrome.tabs.update(tab.tabId, { url: msg.url });
       break;
-    case 'parseCanvasGetQrcode':
-      const url = await getQRCodeUrl(msg.canvas);
-      console.log('url', url);
-      sendRes(url);
     default:
       break;
   }
