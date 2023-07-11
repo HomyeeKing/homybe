@@ -51,7 +51,7 @@ function handleEle() {
         mask.style.color = '#fff';
         mask.style.cursor = 'pointer';
         mask.style.fontSize = '20px';
-        mask.textContent = '点击复制 URL';
+        mask.textContent = 'Copy URL To Clipboard';
         mask.style.display = 'flex';
         mask.style.justifyContent = 'center';
         mask.style.alignItems = 'center';
@@ -62,10 +62,10 @@ function handleEle() {
         e.stopPropagation();
         navigator.clipboard.writeText(saveUrl).then(
           () => {
-            mask.textContent = '复制成功';
+            mask.textContent = 'Copied 🚀';
           },
           () => {
-            mask.textContent = '复制失败';
+            mask.textContent = 'Copy Failed!😨';
           }
         );
       };

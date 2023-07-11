@@ -16,6 +16,10 @@ when the url is `https://github.com/?q=123`，the popup will be
 
  <img src="./preview.png">
 
+
+## quick get qrcode when hover the image
+
+
 ## explain manifest.json structure
 
 ```json
