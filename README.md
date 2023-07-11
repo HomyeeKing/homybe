@@ -20,6 +20,11 @@ when the url is `https://github.com/?q=123`，the popup will be
 ## quick get qrcode when hover the image
 
 
+
+[qrcode](https://github.com/HomyeeKing/href-list/assets/49113249/f6c38cfd-51e4-4093-ae61-25085ff919c6)
+
+
+
 ## explain manifest.json structure
 
 ```json
