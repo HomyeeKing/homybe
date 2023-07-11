@@ -30,8 +30,18 @@ async function getQRCodeUrl(ele, isCanvas) {
  */
 function handleEle() {
   /** @type HTMLDivElement */
-  let parentNode, target;
+  let parentNode,
+    /** @type HTMLElement */
+    target,
+    mouseLeaved = true;
   const mask = document.createElement('div');
+  const p = document.createElement('p');
+  mask.appendChild(p);
+  // const close = document.createElement('i');
+  // mask.appendChild(close);
+  // close.textContent = '×';
+  // close.style.color = '#fff';
+  // close.style.fontSize = '20px';
 
   document.addEventListener('mouseover', async (event) => {
     event.stopPropagation();
@@ -42,42 +52,44 @@ function handleEle() {
       parentNode = target.parentNode;
       parentNode.style.position = 'relative';
       let saveUrl = await getQRCodeUrl(target, isCanvas);
-
       if (saveUrl) {
         mask.id = 'easy-href-qrcode-mask';
         mask.style.position = 'absolute';
         mask.style.inset = 0;
         mask.style.background = 'rgba(0,0,0,.7)';
-        mask.style.color = '#fff';
         mask.style.cursor = 'pointer';
-        mask.style.fontSize = '20px';
-        mask.textContent = 'Copy URL To Clipboard';
         mask.style.display = 'flex';
+        mask.style.flexDirection = 'column';
         mask.style.justifyContent = 'center';
         mask.style.alignItems = 'center';
+        p.style.fontSize = '20px';
+        p.style.color = '#fff';
+        p.textContent = 'Copy URL To Clipboard';
         parentNode.appendChild(mask);
       }
-
       mask.onclick = async (e) => {
         e.stopPropagation();
         navigator.clipboard.writeText(saveUrl).then(
           () => {
-            mask.textContent = 'Copied 🚀';
+            p.textContent = 'Copied 🚀';
           },
           () => {
-            mask.textContent = 'Copy Failed!😨';
+            p.textContent = 'Copy Failed!😨';
           }
         );
       };
     }
   });
 
-  mask.addEventListener('mouseleave', (event) => {
+  function handleMaskRemove(event) {
     event.stopPropagation();
+    // 控制是否显示遮罩
     if (parentNode && mask) {
       parentNode.removeChild(mask);
     }
-  });
+  }
+  // close.addEventListener('click', handleMaskRemove);
+  mask.addEventListener('mouseleave', handleMaskRemove);
 }
 
 export function registerCanvasListener() {
