@@ -8,6 +8,9 @@
     "tabs",
     "contextMenus"
   ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; script-src-elem"
+  },
   "background": {
     "service_worker": "background.mjs",
     "type": "module"
@@ -15,7 +18,8 @@
   "content_scripts": [
     {
       "matches": [
-        "https://*/*"
+        "https://*/*",
+        "http://*/*"
       ],
       "js": [
         "./content_scripts/init.js"
@@ -25,12 +29,14 @@
   "web_accessible_resources": [
     {
       "matches": [
-        "https://*/*"
+        "https://*/*",
+        "http://*/*"
       ],
       "resources": [
         "/content_scripts/*.js",
         "/src/*.js"
-      ]
+      ],
+      "use_dynamic_url": true
     }
   ],
   "action": {
