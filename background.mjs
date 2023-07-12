@@ -13,7 +13,7 @@ chrome.tabs.onUpdated.addListener(async () => {
   tab = await getCurrentTab();
 });
 
-chrome.runtime.onMessage.addListener(async (msg, sender, sendRes) => {
+chrome.runtime.onMessage.addListener((msg, sender, sendRes) => {
   switch (msg.type) {
     case 'getUrl':
       sendRes(tab.url);
