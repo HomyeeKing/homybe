@@ -36,6 +36,7 @@ function handleEle() {
     mouseLeaved = true;
   const mask = document.createElement('div');
   const p = document.createElement('p');
+  p.style.lineHeight = '1';
   mask.appendChild(p);
   // const close = document.createElement('i');
   // mask.appendChild(close);
