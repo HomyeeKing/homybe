@@ -13,7 +13,6 @@ async function getQRCodeUrl(ele, isCanvas) {
       // TODO: better parse qrcode image
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
-      ele.crossOrigin = '';
       ctx.drawImage(ele, 0, 0, ele.width, ele.height);
       imageData = ctx.getImageData(0, 0, ele.width, ele.height);
     }
