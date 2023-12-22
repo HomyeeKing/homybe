@@ -58,6 +58,17 @@ export const updateQuery = (newObj, url = store.url) => {
   store.url = addQuery({ ...oldQuery, ...newObj }, url);
   return store.url;
 };
+/**
+ * 更新页面query 没有就新增
+ * @param {object} newObj 要新增的键值对
+ * @param {String} url 当前页面链接
+ */
+export const updateQueryByStr = (queryString, url = store.url) => {
+  const { queryObj: oldQuery } = getPartFromUrl(url);
+  const newObj = queryToObj(queryString);
+  store.url = addQuery({ ...oldQuery, ...newObj }, url);
+  return store.url;
+};
 
 export const throttle = (fn, timeout = 300) => {
   let timer = undefined;

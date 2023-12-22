@@ -40,19 +40,36 @@ td {
   justify-content: center;
 }
 
-
-.text-center{
-    text-align: center;
+.text-center {
+  text-align: center;
 }
 
-.cursor-pointer{
-    cursor: pointer;
+.cursor-pointer {
+  cursor: pointer;
 }
 
-.text-red{
-    color:red
+.text-red {
+  color: red;
 }
 
-.warn-text{
-    display: none;
+.warn-text {
+  display: none;
+}
+
+#tag-section {
+  display: flex;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  width: fit-content;
+  border-radius: 10px;
+  background-color: pink;
+  color: white;
+  font-weight: bold;
+  padding: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  cursor: pointer;
 }

@@ -1,5 +1,5 @@
 import store from './store.js';
-import { rmQuery, updateQuery, showTips, addQuery } from './utils.js';
+import { rmQuery, updateQuery, showTips, updateQueryByStr } from './utils.js';
 import { reloadPage } from './chrUtils.js';
 
 const tbody = document.querySelector('#tbody');
@@ -13,6 +13,15 @@ const resId = document.querySelector('#resId-input');
 const openPegasusPanel = document.querySelector('#open-pegasus-panel-btn');
 
 const warnText = document.querySelector('.warn-text');
+
+//#region   quick query
+const tagSection = document.querySelector('#tag-section');
+tagSection.onclick = (e) => {
+  const query = e.target.textContent;
+  updateQueryByStr(query);
+};
+//#endregion
+
 /**
  * 创建行
  * @param {String} v1 key的值
