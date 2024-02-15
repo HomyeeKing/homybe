@@ -79,6 +79,17 @@ function removeTr(node) {
   }
 }
 
+function genQRCode(url) {
+  new QRCode(document.querySelector('#qr-code-image'), {
+    text: url,
+    width: 180, //default 128
+    height: 180,
+    colorDark: '#000000',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H,
+  });
+}
+
 chrome.runtime.sendMessage(
   {
     type: 'getUrl',
@@ -86,6 +97,7 @@ chrome.runtime.sendMessage(
   (url) => {
     // init url
     store.pageUrl = url;
+    genQRCode(url);
     store.url = url;
     currentUrlNode.textContent = store.url;
 

@@ -16,6 +16,7 @@ chrome.tabs.onUpdated.addListener(async () => {
 chrome.runtime.onMessage.addListener((msg, sender, sendRes) => {
   switch (msg.type) {
     case 'getUrl':
+      console.log('getUrl');
       sendRes(tab.url);
       break;
     case 'log':

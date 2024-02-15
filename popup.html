@@ -8,6 +8,13 @@
     <link rel="stylesheet" href="./popup.css" />
   </head>
   <body style="max-height: 300px; overflow-y: scroll">
+    <!-- 页面二维码 -->
+    <div id="qr-code">
+      <h3>页面二维码：</h3>
+      <div id="qr-code-image"></div>
+    </div>
+    <br />
+    <h3>参数列表：</h3>
     <table class="table">
       <thead>
         <tr>
@@ -68,6 +75,7 @@
     </template>
 
     <template id="nodata"> url参数为空 </template>
+    <script src="./content_scripts/jsqr.js"></script>
     <script src="./popup.js" type="module"></script>
   </body>
 </html>
