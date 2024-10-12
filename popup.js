@@ -56,6 +56,8 @@ function createTr(v1 = '', v2 = '') {
 
   //   移除行
   removeBtn.addEventListener('click', () => {
+    console.log('click');
+
     removeTr(tr);
     store.url = rmQuery(oldKey);
   });
@@ -74,9 +76,7 @@ function createTr(v1 = '', v2 = '') {
 }
 
 function removeTr(node) {
-  if (tbody.childNodes.length === 1) {
-    tbody.removeChild(node);
-  }
+  tbody.removeChild(node);
 }
 
 function genQRCode(url) {
