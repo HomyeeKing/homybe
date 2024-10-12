@@ -100,5 +100,3 @@ function handleEle() {
 export function registerCanvasListener() {
   handleEle();
 }
-
-
